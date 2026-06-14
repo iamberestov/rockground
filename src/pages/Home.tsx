@@ -1,44 +1,289 @@
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import workSections, { type WorkSection } from '../data/workSections'
+import { smoothScrollElementsToTop } from '../lib/gsapScroll'
+import EmailCopyLink from '../components/EmailCopyLink'
+import WorkMedia from '../components/WorkMedia'
+
+const HERO_ID = 'hero-intro'
+const STAGGER_HIDE_MS = 200
+
+const tags = [
+  'B2B SAAS',
+  'AI DESIGN',
+  'AI AGENTS',
+  '0→1',
+  'CRAFT',
+  'USER FIRST',
+  'END→END',
+  'PRODUCT STRATEGY',
+]
 
 function Home() {
+  const mainScrollRef = useRef<HTMLDivElement>(null)
+  const sidebarScrollRef = useRef<HTMLElement>(null)
+  const heroRef = useRef<HTMLDivElement>(null)
+  const sectionRefs = useRef<Record<string, HTMLElement | null>>({})
+  const sidebarStaggerRef = useRef<HTMLDivElement>(null)
+  const workActiveStaggerRef = useRef<HTMLDivElement>(null)
+  const displayedSectionIdRef = useRef<string | null>(null)
+  const [activeSectionId, setActiveSectionId] = useState<string | null>(null)
+  const [displayedSection, setDisplayedSection] = useState<WorkSection | undefined>(undefined)
+  const [mainScrollRoot, setMainScrollRoot] = useState<HTMLDivElement | null>(null)
+
+  const setMainScrollElement = (node: HTMLDivElement | null) => {
+    mainScrollRef.current = node
+    setMainScrollRoot(node)
+  }
+
+  const scrollToIntro = () => {
+    setActiveSectionId(null)
+    smoothScrollElementsToTop([mainScrollRef.current, sidebarScrollRef.current])
+  }
+
+  useEffect(() => {
+    const root = mainScrollRef.current
+    if (!root) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries.filter((entry) => entry.isIntersecting)
+        const heroEntry = visible.find((entry) => entry.target.id === HERO_ID)
+
+        if (heroEntry) {
+          setActiveSectionId(null)
+          return
+        }
+
+        const top = visible
+          .filter((entry) => entry.target.id !== HERO_ID)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0]
+
+        if (top?.target.id) {
+          setActiveSectionId(top.target.id)
+        }
+      },
+      {
+        root,
+        threshold: [0.2, 0.45, 0.7],
+        rootMargin: '-15% 0px -35% 0px',
+      },
+    )
+
+    const hero = heroRef.current
+    if (hero) observer.observe(hero)
+
+    workSections.forEach(({ id }) => {
+      const node = sectionRefs.current[id]
+      if (node) observer.observe(node)
+    })
+
+    return () => observer.disconnect()
+  }, [])
+
+  const activeSection = activeSectionId
+    ? workSections.find((section) => section.id === activeSectionId)
+    : undefined
+
+  useLayoutEffect(() => {
+    if (!activeSection || !activeSectionId) {
+      displayedSectionIdRef.current = null
+      setDisplayedSection(undefined)
+      return
+    }
+
+    const staggerBlocks = [sidebarStaggerRef.current, workActiveStaggerRef.current].filter(
+      (block): block is HTMLDivElement => Boolean(block),
+    )
+    const previousId = displayedSectionIdRef.current
+    const isContentSwitch = previousId !== null && previousId !== activeSectionId
+
+    const revealBlocks = () => {
+      staggerBlocks.forEach((block) => {
+        block.classList.remove('is-hiding', 'is-shown')
+        void block.offsetHeight
+        block.classList.add('is-shown')
+      })
+    }
+
+    if (!staggerBlocks.length) {
+      setDisplayedSection(activeSection)
+      displayedSectionIdRef.current = activeSectionId
+      return
+    }
+
+    if (!isContentSwitch) {
+      setDisplayedSection(activeSection)
+      displayedSectionIdRef.current = activeSectionId
+      revealBlocks()
+      return
+    }
+
+    staggerBlocks.forEach((block) => {
+      block.classList.add('is-hiding')
+      block.classList.remove('is-shown')
+    })
+
+    const timeout = window.setTimeout(() => {
+      staggerBlocks.forEach((block) => block.classList.remove('is-hiding'))
+      setDisplayedSection(activeSection)
+      displayedSectionIdRef.current = activeSectionId
+      revealBlocks()
+    }, STAGGER_HIDE_MS)
+
+    return () => window.clearTimeout(timeout)
+  }, [activeSection, activeSectionId])
+
+  const visibleSidebarSection = displayedSection ?? activeSection
+
   return (
-    <section id="center">
-      <div className="hero-personal">
-        <div className="avatar">
-          <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
-            <circle cx="60" cy="60" r="58" stroke="var(--accent)" strokeWidth="2" fill="var(--accent-bg)" />
-            <circle cx="60" cy="45" r="18" fill="var(--accent)" opacity="0.4" />
-            <ellipse cx="60" cy="82" rx="30" ry="20" fill="var(--accent)" opacity="0.2" />
-          </svg>
+    <main className="home-page">
+      <header className="home-header home-grid">
+        <button
+          type="button"
+          className="home-avatar home-grid-avatar"
+          onClick={scrollToIntro}
+          aria-label="Back to intro"
+        >
+          <img src="/avatar.png" alt="" width={72} height={72} />
+        </button>
+
+        <nav className="home-nav home-grid-nav" aria-label="Primary">
+          <EmailCopyLink />
+          <a
+            href="https://www.linkedin.com/in/igor-berestov/"
+            className="home-nav-link"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <span className="home-nav-icon home-nav-icon--arrow" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M18.5916 5.40845L5.3916 18.6084" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M9.32471 5.3418L18.5914 5.40713L18.658 14.6751" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </span>
+            linked in
+          </a>
+          <Link to="/about" className="home-nav-link">
+            <span className="home-nav-icon home-nav-icon--about" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M14 15.1169C14 15.1169 13 15.5001 12 15.5001C11 15.5001 10 15.1169 10 15.1169" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M8.53634 9.22998V11.3078" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M15.4631 9.22998V11.3078" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                <circle cx="11.9998" cy="12.0001" r="9.00375" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </span>
+            about me
+          </Link>
+        </nav>
+      </header>
+
+      <div className="home-columns home-grid">
+        <aside className="home-sidebar home-grid-sidebar" aria-label="Profile" ref={sidebarScrollRef}>
+          <div className="home-sidebar-scroll">
+            {activeSection ? (
+              <>
+                <div
+                  ref={workActiveStaggerRef}
+                  className="home-work-active t-stagger"
+                  aria-live="polite"
+                >
+                  {visibleSidebarSection ? (
+                    <>
+                      <p className="home-work-active-title t-stagger-line t-stagger-line--1">
+                        {visibleSidebarSection.projectTitle}
+                      </p>
+                      <p className="home-work-active-meta t-stagger-line t-stagger-line--2">
+                        {visibleSidebarSection.projectMeta}
+                      </p>
+                    </>
+                  ) : null}
+                </div>
+
+                <div className="home-sidebar-center">
+                  <div
+                    ref={sidebarStaggerRef}
+                    className="home-sidebar-content t-stagger"
+                    aria-live="polite"
+                  >
+                    {visibleSidebarSection?.sidebarHeading ? (
+                      <p className="home-sidebar-heading t-stagger-line t-stagger-line--1">
+                        {visibleSidebarSection.sidebarHeading}
+                      </p>
+                    ) : null}
+                    {visibleSidebarSection ? (
+                      <p
+                        className={`home-sidebar-body t-stagger-line ${
+                          visibleSidebarSection.sidebarHeading
+                            ? 't-stagger-line--2'
+                            : 't-stagger-line--1'
+                        }`}
+                      >
+                        {visibleSidebarSection.sidebarBody}
+                      </p>
+                    ) : null}
+                  </div>
+                </div>
+              </>
+            ) : (
+              <div className="home-sidebar-center">
+                <div className="home-sidebar-intro" aria-live="polite">
+                  <h1>Hey, I&apos;m Igor B.</h1>
+                  <p className="home-role">Staff Product Designer</p>
+                </div>
+              </div>
+            )}
+
+            <div className="home-tags" aria-label="Focus areas">
+              {tags.map((tag) => (
+                <span key={tag} className="home-tag">{tag}</span>
+              ))}
+            </div>
+          </div>
+        </aside>
+
+        <div className="home-main home-grid-main" ref={setMainScrollElement}>
+          <div className="home-main-body">
+            <div className="home-hero-copy" id={HERO_ID} ref={heroRef}>
+              <p className="home-bio">
+                I bridge AI-native product thinking, product strategy, and design execution to turn
+                complex technology into intuitive user experiences.
+              </p>
+              <p className="home-bio-secondary">
+                Currently shaping AI experiences at{' '}
+                <a href="https://clickup.com" target="_blank" rel="noreferrer">ClickUp</a>. Also worked with{' '}
+                <a href="https://www.wrike.com" target="_blank" rel="noreferrer">Wrike</a> and{' '}
+                <a href="https://www.sberbank.com" target="_blank" rel="noreferrer">Sberbank</a>.
+              </p>
+            </div>
+
+            <div className="home-work-feed" aria-label="Selected work">
+              {workSections.map((section) => (
+                <section
+                  key={section.id}
+                  id={section.id}
+                  ref={(node) => {
+                    sectionRefs.current[section.id] = node
+                  }}
+                  className={`home-work-section${section.media ? ' home-work-section--media' : ''}`}
+                  style={section.media ? undefined : { minHeight: `${section.height}px` }}
+                >
+                  {section.media ? (
+                    <WorkMedia media={section.media} scrollRoot={mainScrollRoot} />
+                  ) : (
+                    <div className="home-work-placeholder">
+                      <span className="home-work-placeholder-label">Content placeholder</span>
+                      <span className="home-work-placeholder-title">{section.title}</span>
+                      <span className="home-work-placeholder-meta">{section.meta}</span>
+                    </div>
+                  )}
+                </section>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
-      <div>
-        <h1>Hi, I'm a Designer</h1>
-        <p className="tagline">
-          Crafting thoughtful digital experiences — from concept to pixel.
-        </p>
-      </div>
-
-      <div className="action-cards">
-        <Link to="/portfolio" className="action-card">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-            <circle cx="8.5" cy="8.5" r="1.5"></circle>
-            <polyline points="21 15 16 10 5 21"></polyline>
-          </svg>
-          <span className="card-title">Portfolio</span>
-          <span className="card-desc">View my recent work</span>
-        </Link>
-        <Link to="/prototyping" className="action-card">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <polyline points="16 18 22 12 16 6"></polyline>
-            <polyline points="8 6 2 12 8 18"></polyline>
-          </svg>
-          <span className="card-title">Prototyping</span>
-          <span className="card-desc">Explore interactive prototypes</span>
-        </Link>
-      </div>
-    </section>
+    </main>
   )
 }
 

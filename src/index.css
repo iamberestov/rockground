@@ -1,24 +1,81 @@
+@font-face {
+  font-family: 'ABC Diatype Mono Trial';
+  src: url('/fonts/ABCDiatypeMonoTrial-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
+  --black: #000000;
+  --white: #ffffff;
+  --mist: #f5f5f5;
+  --gray: #4d4d4d;
+  --gray-muted: rgba(77, 77, 77, 0.32);
+
+  --text: var(--gray-muted);
+  --text-h: var(--black);
+  --bg: var(--white);
   --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
+  --code-bg: var(--mist);
+  --accent: var(--black);
+  --accent-bg: rgba(0, 0, 0, 0.04);
+  --accent-border: rgba(0, 0, 0, 0.2);
+  --social-bg: var(--mist);
+  --placeholder-border: rgba(77, 77, 77, 0.2);
   --shadow:
     rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
+  --sans: 'Inter', system-ui, 'Segoe UI', Roboto, sans-serif;
+  --heading: var(--sans);
+  --mono: 'IBM Plex Mono', ui-monospace, Consolas, monospace;
+  --home-tag-font: 'ABC Diatype Mono Trial', var(--mono);
 
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
+  --home-page-padding: 80px;
+  --home-grid-max: 1920px;
+  --home-grid-margin: 80px;
+  --home-grid-gap: 16px;
+  --home-body-size: 28px;
+  --home-body-leading: 40px;
+  --home-tag-size: 20px;
+  --home-header-offset: 136px;
+  --home-bottom-rail: clamp(96px, 15svh, 128px);
+  --stagger-dur: 500ms;
+  --stagger-distance: 12px;
+  --stagger-stagger: 40ms;
+  --stagger-blur: 3px;
+  --stagger-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --text-swap-dur: 150ms;
+  --text-swap-translate-y: 4px;
+  --text-swap-blur: 2px;
+  --text-swap-ease: ease-in-out;
+  --icon-swap-dur: 250ms;
+  --icon-swap-blur: 2px;
+  --icon-swap-start-scale: 0.25;
+  --icon-swap-ease: ease-in-out;
+  --nav-glass-bg:
+    linear-gradient(-75deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.05)),
+    rgba(240, 240, 240, 0.7);
+  --nav-glass-shadow:
+    inset 0 2px 2px rgba(0, 0, 0, 0.05),
+    inset 0 -2px 2px rgba(255, 255, 255, 0.5),
+    0 4px 2px -2px rgba(0, 0, 0, 0.2),
+    0 0 1.6px 4px inset rgba(255, 255, 255, 0.2);
+  --nav-glass-shadow-hover:
+    inset 0 2px 2px rgba(0, 0, 0, 0.05),
+    inset 0 -2px 2px rgba(255, 255, 255, 0.5),
+    0 2.4px 0.8px -1.6px rgba(0, 0, 0, 0.25),
+    0 0 0.8px 1.6px inset rgba(255, 255, 255, 0.5);
+  --nav-glass-border: rgba(255, 255, 255, 0.5);
+  --nav-glass-ring: rgba(0, 0, 0, 0.5);
+  --nav-glass-ease: cubic-bezier(0.25, 1, 0.5, 1);
+  --selection-bg: #e8ff26;
+  --selection-text: #000000;
+
+  font: 16px/145% var(--sans);
+  letter-spacing: 0;
   color-scheme: light dark;
-  color: var(--text);
+  color: var(--text-h);
   background: var(--bg);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -26,73 +83,128 @@
   -moz-osx-font-smoothing: grayscale;
 
   @media (max-width: 1024px) {
-    font-size: 16px;
+    --home-page-padding: 24px;
+    --home-grid-margin: 24px;
+    --home-grid-gap: 16px;
+    --home-body-size: 22px;
+    --home-body-leading: 32px;
+    --home-tag-size: 16px;
+    --home-header-offset: 100px;
+    --home-bottom-rail: clamp(80px, 14svh, 108px);
+  }
+
+  @media (max-width: 640px) {
+    --home-page-padding: 16px;
+    --home-grid-margin: 16px;
+    --home-grid-gap: 12px;
+    --home-body-size: 18px;
+    --home-body-leading: 28px;
+    --home-tag-size: 14px;
   }
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-  }
+    color-scheme: dark;
 
-  #social .button-icon {
-    filter: invert(1) brightness(2);
+    --mist: #1c1c1c;
+    --gray: #b0b0b0;
+    --gray-muted: rgba(255, 255, 255, 0.38);
+
+    --text: var(--gray-muted);
+    --text-h: #f5f5f5;
+    --bg: #0d0d0d;
+    --border: #2e2e2e;
+    --code-bg: #1a1a1a;
+    --accent: #f5f5f5;
+    --accent-bg: rgba(255, 255, 255, 0.06);
+    --accent-border: rgba(255, 255, 255, 0.18);
+    --social-bg: #1a1a1a;
+    --placeholder-border: rgba(255, 255, 255, 0.18);
+    --nav-glass-bg:
+      linear-gradient(-75deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.04)),
+      rgba(255, 255, 255, 0.06);
+    --nav-glass-shadow:
+      inset 0 2px 2px rgba(0, 0, 0, 0.35),
+      inset 0 -2px 2px rgba(255, 255, 255, 0.08),
+      0 4px 2px -2px rgba(0, 0, 0, 0.45),
+      0 0 1.6px 4px inset rgba(255, 255, 255, 0.06);
+    --nav-glass-shadow-hover:
+      inset 0 2px 2px rgba(0, 0, 0, 0.3),
+      inset 0 -2px 2px rgba(255, 255, 255, 0.12),
+      0 2.4px 0.8px -1.6px rgba(0, 0, 0, 0.55),
+      0 0 0.8px 1.6px inset rgba(255, 255, 255, 0.12);
+    --nav-glass-border: rgba(255, 255, 255, 0.22);
+    --nav-glass-ring: rgba(255, 255, 255, 0.28);
+    --shadow:
+      rgba(0, 0, 0, 0.45) 0 10px 15px -3px, rgba(0, 0, 0, 0.3) 0 4px 6px -2px;
   }
 }
 
 #root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  text-align: left;
+  border: none;
   min-height: 100svh;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
 }
 
+#root:has(.home-page) {
+  height: 100svh;
+  overflow: hidden;
+}
+
 body {
   margin: 0;
+  background: var(--bg);
+  color: var(--text-h);
+}
+
+::selection {
+  background: var(--selection-bg);
+  color: var(--selection-text);
+}
+
+::-moz-selection {
+  background: var(--selection-bg);
+  color: var(--selection-text);
 }
 
 h1,
 h2 {
   font-family: var(--heading);
-  font-weight: 500;
+  font-weight: 400;
   color: var(--text-h);
 }
 
 h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
-  }
+  font-size: var(--home-body-size);
+  line-height: normal;
+  letter-spacing: 0;
+  margin: 0;
 }
+
 h2 {
   font-size: 24px;
   line-height: 118%;
   letter-spacing: -0.24px;
   margin: 0 0 8px;
+
   @media (max-width: 1024px) {
     font-size: 20px;
   }
 }
+
 p {
   margin: 0;
+}
+
+a {
+  color: inherit;
 }
 
 code,
