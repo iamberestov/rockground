@@ -796,10 +796,10 @@ button.home-nav-link:focus-visible {
 
   .home-footer-glow {
     top: auto;
-    bottom: -20%;
+    bottom: 0;
     left: 50%;
-    transform: translateX(-50%);
     width: 120%;
+    transform: translate(-50%, 52%);
   }
 }
 
@@ -807,6 +807,10 @@ button.home-nav-link:focus-visible {
   .home-footer-stage {
     gap: 32px;
     padding-block: 48px 96px;
+  }
+
+  .home-footer-glow {
+    transform: translate(-50%, 50%);
   }
 
   .home-footer-cta {

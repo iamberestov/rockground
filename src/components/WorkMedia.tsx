@@ -32,11 +32,11 @@ function WorkMedia({ media, scrollRoot }: WorkMediaProps) {
     const observer = new IntersectionObserver(
       (entries) => {
         const entry = entries[0]
-        setIsNearViewport(Boolean(entry?.isIntersecting && entry.intersectionRatio >= 0.2))
+        setIsNearViewport(Boolean(entry?.isIntersecting))
       },
       {
         root: scrollRoot ?? null,
-        threshold: [0, 0.2, 0.35],
+        threshold: 0,
         rootMargin: '200px 0px',
       },
     )
@@ -129,32 +129,32 @@ function WorkMedia({ media, scrollRoot }: WorkMediaProps) {
 
   const posterAlt = media.label ?? 'Project preview'
 
-  const videoAsset = shouldPlayVideo ? (
-    <video
-      ref={videoRef}
-      className={assetClassName}
-      style={assetStyle}
-      muted
-      loop
-      playsInline
-      autoPlay
-      preload="auto"
-      poster={media.poster}
-      aria-label={posterAlt}
-    >
-      {media.webm ? <source src={media.webm} type="video/webm" /> : null}
-      <source src={media.src} type="video/mp4" />
-    </video>
-  ) : media.poster ? (
-    <img
-      className={assetClassName}
-      style={assetStyle}
-      src={media.poster}
-      alt={posterAlt}
-      loading="lazy"
-      decoding="async"
-    />
-  ) : null
+  const videoAsset =
+    prefersReducedMotion && media.poster ? (
+      <img
+        className={assetClassName}
+        style={assetStyle}
+        src={media.poster}
+        alt={posterAlt}
+        loading="lazy"
+        decoding="async"
+      />
+    ) : (
+      <video
+        ref={videoRef}
+        className={assetClassName}
+        style={assetStyle}
+        muted
+        loop
+        playsInline
+        preload="auto"
+        poster={media.poster}
+        aria-label={posterAlt}
+      >
+        {media.webm ? <source src={media.webm} type="video/webm" /> : null}
+        <source src={media.src} type="video/mp4" />
+      </video>
+    )
 
   if (isBoxed) {
     return (

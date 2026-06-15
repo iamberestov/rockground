@@ -220,10 +220,10 @@ const workSections: WorkSection[] = [
     sidebarBody:
       'My work influenced activation, retention, quality, and monetization by turning a technically complex AI system into an approachable product experience.',
     media: {
-      type: 'svg',
-      src: '/work/project-10/avatar%20builder%201.svg',
+      type: 'image',
+      src: '/work/project-10/avatar%20builder%201.png',
       alt: 'Avatar Builder interface',
-      aspectRatio: 908 / 669,
+      aspectRatio: 2724 / 2006,
       outerAspectRatio: 1168 / 800,
       layout: 'boxed',
       boxRadius: 8,
@@ -254,11 +254,13 @@ const workSections: WorkSection[] = [
     sidebarBody:
       'This work helped move Super Agents from a new AI concept into a product experience users could understand, adopt, and trust.',
     media: {
-      type: 'svg',
-      src: '/work/project-12/skills.svg',
+      type: 'image',
+      src: '/work/project-12/skills.png',
       alt: 'Agent skills interface',
-      aspectRatio: 1168 / 800,
-      layout: 'default',
+      aspectRatio: 1024 / 753,
+      outerAspectRatio: 1168 / 800,
+      layout: 'boxed',
+      boxRadius: 8,
     },
   },
   {
@@ -272,7 +274,7 @@ const workSections: WorkSection[] = [
       'Led a major Forms redesign grounded in real user insights, combining usability testing, customer interviews, and product analytics to simplify form creation and improve the end-to-end experience.',
     media: {
       type: 'video',
-      src: '/work/project-13/_main_x2_new.mp4',
+      src: '/work/project-13/forms-main.mp4',
       aspectRatio: 2880 / 1800,
       outerAspectRatio: 1168 / 800,
       layout: 'boxed',
