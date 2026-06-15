@@ -784,11 +784,14 @@ button.home-nav-link:focus-visible {
   }
 
   .home-footer-cta {
-    align-self: flex-end;
+    align-self: stretch;
+    display: flex;
+    justify-content: flex-end;
   }
 
   .home-footer-email {
     text-align: right;
+    justify-content: flex-end;
   }
 
   .home-footer-glow {
@@ -811,10 +814,9 @@ button.home-nav-link:focus-visible {
   }
 
   .home-footer-email {
-    justify-content: flex-start;
-    text-align: left;
+    justify-content: flex-end;
+    text-align: right;
     white-space: normal;
-    word-break: break-all;
   }
 }
 
