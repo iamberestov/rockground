@@ -9,6 +9,7 @@ export type WorkMedia =
       layout?: 'default' | 'boxed'
       outerAspectRatio?: number
       boxRadius?: number
+      objectFit?: 'cover'
     }
   | {
       type: 'image'
@@ -18,6 +19,7 @@ export type WorkMedia =
       layout?: 'default' | 'boxed'
       outerAspectRatio?: number
       boxRadius?: number
+      objectFit?: 'cover'
     }
   | {
       type: 'svg'
@@ -27,6 +29,7 @@ export type WorkMedia =
       layout?: 'default' | 'boxed'
       outerAspectRatio?: number
       boxRadius?: number
+      objectFit?: 'cover'
     }
 
 export interface WorkSection {
