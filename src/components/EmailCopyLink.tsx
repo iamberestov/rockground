@@ -1,12 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
 import { swapTextContent } from '../lib/textSwap'
-
-const EMAIL = 'rockberrycom@gmail.com'
+import { EMAIL } from '../lib/email'
 const RESET_MS = 2500
+const COPY_SOUND_SRC = '/sounds/email-copied.mp3'
 
 function EmailCopyLink() {
   const labelRef = useRef<HTMLSpanElement>(null)
   const resetTimeoutRef = useRef<number | null>(null)
+  const copySoundRef = useRef<HTMLAudioElement | null>(null)
   const [copied, setCopied] = useState(false)
 
   useEffect(() => {
@@ -17,6 +18,16 @@ function EmailCopyLink() {
     }
   }, [])
 
+  const playCopySound = () => {
+    if (!copySoundRef.current) {
+      copySoundRef.current = new Audio(COPY_SOUND_SRC)
+    }
+
+    const sound = copySoundRef.current
+    sound.currentTime = 0
+    void sound.play().catch(() => {})
+  }
+
   const handleClick = async () => {
     try {
       await navigator.clipboard.writeText(EMAIL)
@@ -24,6 +35,7 @@ function EmailCopyLink() {
       return
     }
 
+    playCopySound()
     if (resetTimeoutRef.current !== null) {
       window.clearTimeout(resetTimeoutRef.current)
     }
@@ -57,18 +69,17 @@ function EmailCopyLink() {
       >
         <span className="t-icon home-nav-icon--copy" data-icon="a">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="21" y="17" width="14" height="14" rx="3" transform="rotate(180 21 17)" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-            <path d="M17 20C16.3604 20.6413 15.4915 21.0012 14.5857 21H6C4.34315 21 3 19.6569 3 18V9.41431C2.99879 8.50854 3.35869 7.63964 4 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M5.41406 7.00195L4.70605 7.70801C4.2532 8.15971 3.99915 8.77347 4 9.41309V18C4 19.1046 4.89543 20 6 20H14.5869C15.2265 20.0008 15.8403 19.7468 16.292 19.2939L16.998 18.5859L18.4141 19.998L17.708 20.7061C16.8808 21.5354 15.7573 22.0002 14.5859 21.999V22H6C3.79086 22 2 20.2091 2 18V9.41406C1.99886 8.24273 2.46458 7.1192 3.29395 6.29199L4.00195 5.58594L5.41406 7.00195ZM18 2C20.2091 2 22 3.79086 22 6V14C22 16.2091 20.2091 18 18 18H10C7.79086 18 6 16.2091 6 14V6C6 3.79086 7.79086 2 10 2H18ZM10 4C8.89543 4 8 4.89543 8 6V14C8 15.1046 8.89543 16 10 16H18C19.1046 16 20 15.1046 20 14V6C20 4.89543 19.1046 4 18 4H10Z" fill="currentColor" />
           </svg>
         </span>
         <span className="t-icon home-nav-icon--copy" data-icon="b">
-          <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg width="24" height="24" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M7 14.5L11.5 19L21 9.5" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </span>
       </span>
       <span ref={labelRef} className="t-text-swap">
-        email
+        Email
       </span>
     </button>
   )

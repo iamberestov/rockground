@@ -56,9 +56,8 @@ const workSections: WorkSection[] = [
     media: {
       type: 'video',
       src: '/work/project-01/my-tasks.mp4',
-      webm: '/work/project-01/my-tasks.webm',
       poster: '/work/project-01/my-tasks-poster.webp',
-      aspectRatio: 907 / 668,
+      aspectRatio: 2932 / 2160,
       outerAspectRatio: 1168 / 800,
       layout: 'boxed',
       boxRadius: 8,
