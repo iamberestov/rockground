@@ -42,7 +42,7 @@ function EmailCopyLink() {
 
     if (!copied) {
       if (labelRef.current) {
-        swapTextContent(labelRef.current, 'copied')
+        swapTextContent(labelRef.current, 'Copied')
       }
       setCopied(true)
     }
@@ -50,7 +50,7 @@ function EmailCopyLink() {
     resetTimeoutRef.current = window.setTimeout(() => {
       setCopied(false)
       if (labelRef.current) {
-        swapTextContent(labelRef.current, 'email')
+        swapTextContent(labelRef.current, 'Email')
       }
     }, RESET_MS)
   }

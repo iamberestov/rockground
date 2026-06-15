@@ -400,6 +400,11 @@ button.home-nav-link:focus-visible {
   object-fit: cover;
 }
 
+.home-work-media-asset--scaled {
+  transform: scale(var(--work-media-asset-scale, 1.02));
+  transform-origin: center;
+}
+
 .home-work-placeholder {
   width: 100%;
   height: 100%;

@@ -74,9 +74,16 @@ function WorkMedia({ media, scrollRoot }: WorkMediaProps) {
   const assetClassName = [
     'home-work-media-asset',
     'objectFit' in media && media.objectFit === 'cover' ? 'home-work-media-asset--cover' : null,
+    'assetScale' in media && media.assetScale ? 'home-work-media-asset--scaled' : null,
   ]
     .filter(Boolean)
     .join(' ')
+
+  const assetStyle = (
+    'assetScale' in media && media.assetScale
+      ? { '--work-media-asset-scale': String(media.assetScale) }
+      : {}
+  ) as CSSProperties
 
   const boxedFrameStyle = {
     '--work-media-box-radius': `${'boxRadius' in media ? (media.boxRadius ?? 12) : 12}px`,
@@ -85,6 +92,7 @@ function WorkMedia({ media, scrollRoot }: WorkMediaProps) {
   const renderStaticAsset = (src: string, alt: string) => (
     <img
       className={assetClassName}
+      style={assetStyle}
       src={src}
       alt={alt}
       loading="lazy"
@@ -125,6 +133,7 @@ function WorkMedia({ media, scrollRoot }: WorkMediaProps) {
     <video
       ref={videoRef}
       className={assetClassName}
+      style={assetStyle}
       muted
       loop
       playsInline
@@ -139,6 +148,7 @@ function WorkMedia({ media, scrollRoot }: WorkMediaProps) {
   ) : media.poster ? (
     <img
       className={assetClassName}
+      style={assetStyle}
       src={media.poster}
       alt={posterAlt}
       loading="lazy"

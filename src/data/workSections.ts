@@ -10,6 +10,7 @@ export type WorkMedia =
       outerAspectRatio?: number
       boxRadius?: number
       objectFit?: 'cover'
+      assetScale?: number
     }
   | {
       type: 'image'
@@ -20,6 +21,7 @@ export type WorkMedia =
       outerAspectRatio?: number
       boxRadius?: number
       objectFit?: 'cover'
+      assetScale?: number
     }
   | {
       type: 'svg'
@@ -30,6 +32,7 @@ export type WorkMedia =
       outerAspectRatio?: number
       boxRadius?: number
       objectFit?: 'cover'
+      assetScale?: number
     }
 
 export interface WorkSection {
@@ -39,7 +42,6 @@ export interface WorkSection {
   height: number
   projectTitle: string
   projectMeta: string
-  sidebarHeading?: string
   sidebarBody: string
   media?: WorkMedia
 }
@@ -64,10 +66,11 @@ const workSections: WorkSection[] = [
       outerAspectRatio: 1168 / 800,
       layout: 'boxed',
       boxRadius: 8,
+      assetScale: 1.02,
       label: 'ClickUp Brain interface demo',
     },
     sidebarBody:
-      'ClickUp Super Agents are AI teammates that use the context of tasks, docs, conversations, and schedules to answer questions, track progress, send updates, and automate repetitive workflows.',
+      'ClickUp SuperAgents are AI teammates built to help teams delegate work.',
   },
   {
     id: 'project-02',
@@ -75,9 +78,8 @@ const workSections: WorkSection[] = [
     meta: 'ClickUp / 2025',
     height: 800,
     ...agentsProject,
-    sidebarHeading: 'My role & impact',
     sidebarBody:
-      'I led product design for AI Agents from the earliest stages, turning a technically complex and ambiguous AI concept into a clear product experience inside ClickUp.',
+      'They use the context of tasks, docs, conversations, and schedules to answer questions, track progress, suggest next steps, send updates, and automate repetitive workflows, making everyday work faster and less manual.',
     media: {
       type: 'video',
       src: '/work/project-02/agent-builder.mp4',
@@ -96,9 +98,8 @@ const workSections: WorkSection[] = [
     meta: 'ClickUp / 2025',
     height: 800,
     ...agentsProject,
-    sidebarHeading: 'My role & impact',
     sidebarBody:
-      'I shaped the full agent lifecycle: introducing the agent mental model, designing creation and configuration flows, defining how agents use workspace context, and creating patterns for triggers, skills, tools, knowledge, monitoring, editing, and continuous improvement.',
+      'I led product design for AI Agents from the earliest stages, when the product direction, mental model, and interaction patterns were still highly ambiguous.',
     media: {
       type: 'svg',
       src: '/work/project-03/brain-assistant.svg',
@@ -115,9 +116,8 @@ const workSections: WorkSection[] = [
     meta: 'ClickUp / 2024',
     height: 800,
     ...agentsProject,
-    sidebarHeading: 'Cumulative impact',
     sidebarBody:
-      'Helped define and design ClickUp Super Agents from concept to scaled adoption, contributing to 250K+ agents created.',
+      'There were few established patterns to reference in the market, so a large part of the work was defining how an AI agent should be understood, created, managed, and improved inside a complex productivity platform.',
     media: {
       type: 'video',
       src: '/work/project-04/eyebrow-figma.mp4',
@@ -136,7 +136,7 @@ const workSections: WorkSection[] = [
     height: 800,
     ...agentsProject,
     sidebarBody:
-      'My work influenced activation, retention, quality, and monetization by turning a technically complex AI system into an approachable product experience.',
+      'My focus was to translate new and technically complex AI capabilities into familiar, usable product patterns.',
     media: {
       type: 'svg',
       src: '/work/project-05/consumption.svg',
@@ -152,7 +152,7 @@ const workSections: WorkSection[] = [
     height: 800,
     ...agentsProject,
     sidebarBody:
-      'I also shaped a distinct visual language and interaction model that became a strong product differentiator, helping Super Agents stand out in demos, sales conversations, and a crowded AI market.',
+      'I shaped the end-to-end agent experience, from explaining what agents are to helping users create, configure, run, monitor, and improve them over time.',
     media: {
       type: 'svg',
       src: '/work/project-06/credits.svg',
@@ -167,7 +167,8 @@ const workSections: WorkSection[] = [
     meta: 'ClickUp / 2025',
     height: 800,
     ...agentsProject,
-    sidebarBody: 'Placeholder copy for the Mobile Banking case study.',
+    sidebarBody:
+      'This required close collaboration with product, engineering, leadership, and research to turn ambiguity into clear product decisions.',
     media: {
       type: 'svg',
       src: '/work/project-07/leaderboard.svg',
@@ -182,7 +183,8 @@ const workSections: WorkSection[] = [
     meta: 'ClickUp / 2025',
     height: 800,
     ...agentsProject,
-    sidebarBody: 'Placeholder copy for the Brand Refresh case study.',
+    sidebarBody:
+      'Align the team around a shared UX direction, and raise the craft bar for ClickUp’s first generation of AI-native teammate experiences.',
     media: {
       type: 'video',
       src: '/work/project-08/agent-speak.mp4',
@@ -199,7 +201,8 @@ const workSections: WorkSection[] = [
     meta: 'ClickUp / 2025',
     height: 800,
     ...agentsProject,
-    sidebarBody: 'Placeholder copy for the Block Kit case study.',
+    sidebarBody:
+      'Helped define and design ClickUp Super Agents from concept to scaled adoption, contributing to 250K+ agents created.',
     media: {
       type: 'svg',
       src: '/work/project-09/BlockKit.svg',
@@ -214,7 +217,8 @@ const workSections: WorkSection[] = [
     meta: 'ClickUp / 2025',
     height: 800,
     ...agentsProject,
-    sidebarBody: 'Placeholder copy for the Avatar Builder case study.',
+    sidebarBody:
+      'My work influenced activation, retention, quality, and monetization by turning a technically complex AI system into an approachable product experience.',
     media: {
       type: 'svg',
       src: '/work/project-10/avatar%20builder%201.svg',
@@ -231,7 +235,8 @@ const workSections: WorkSection[] = [
     meta: 'ClickUp / 2025',
     height: 800,
     ...agentsProject,
-    sidebarBody: 'Placeholder copy for the Triggers case study.',
+    sidebarBody:
+      'I also shaped a distinct visual language and interaction model that became a strong product differentiator, helping Super Agents stand out in demos, sales conversations, and a crowded AI market.',
     media: {
       type: 'svg',
       src: '/work/project-11/trigger.svg',
@@ -246,7 +251,8 @@ const workSections: WorkSection[] = [
     meta: 'ClickUp / 2025',
     height: 800,
     ...agentsProject,
-    sidebarBody: 'Placeholder copy for the Skills case study.',
+    sidebarBody:
+      'This work helped move Super Agents from a new AI concept into a product experience users could understand, adopt, and trust.',
     media: {
       type: 'svg',
       src: '/work/project-12/skills.svg',

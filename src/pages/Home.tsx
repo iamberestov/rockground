@@ -279,19 +279,8 @@ function Home() {
                     className="home-sidebar-content t-stagger"
                     aria-live="polite"
                   >
-                    {visibleSidebarSection?.sidebarHeading ? (
-                      <p className="home-sidebar-heading t-stagger-line t-stagger-line--1">
-                        {visibleSidebarSection.sidebarHeading}
-                      </p>
-                    ) : null}
                     {visibleSidebarSection ? (
-                      <p
-                        className={`home-sidebar-body t-stagger-line ${
-                          visibleSidebarSection.sidebarHeading
-                            ? 't-stagger-line--2'
-                            : 't-stagger-line--1'
-                        }`}
-                      >
+                      <p className="home-sidebar-body t-stagger-line t-stagger-line--1">
                         {visibleSidebarSection.sidebarBody}
                       </p>
                     ) : null}
