@@ -47,6 +47,9 @@
   --stagger-stagger: 40ms;
   --stagger-blur: 3px;
   --stagger-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --press-scale: 0.96;
+  --press-dur: 150ms;
+  --press-ease: cubic-bezier(0.22, 1, 0.36, 1);
   --text-swap-dur: 150ms;
   --text-swap-translate-y: 4px;
   --text-swap-blur: 2px;
@@ -103,6 +106,7 @@
     --home-body-size: 18px;
     --home-body-leading: 28px;
     --home-tag-size: 14px;
+    --home-header-offset: 120px;
   }
 }
 
@@ -161,6 +165,7 @@
 #root:has(.home-page) {
   height: 100svh;
   overflow: hidden;
+  isolation: isolate;
 }
 
 body {

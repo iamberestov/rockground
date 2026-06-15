@@ -1,4 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import workSections, { type WorkSection } from '../data/workSections'
 import { smoothScrollElementsToTop } from '../lib/gsapScroll'
 import EmailCopyLink from '../components/EmailCopyLink'
@@ -7,6 +8,7 @@ import WorkMedia from '../components/WorkMedia'
 
 const HERO_ID = 'hero-intro'
 const STAGGER_HIDE_MS = 200
+const AVATAR_SOUND_SRC = '/sounds/avatar-pop.mp3'
 
 const tags = [
   'B2B SAAS',
@@ -26,6 +28,7 @@ function Home() {
   const sectionRefs = useRef<Record<string, HTMLElement | null>>({})
   const sidebarStaggerRef = useRef<HTMLDivElement>(null)
   const workActiveStaggerRef = useRef<HTMLDivElement>(null)
+  const avatarSoundRef = useRef<HTMLAudioElement | null>(null)
   const displayedSectionIdRef = useRef<string | null>(null)
   const [activeSectionId, setActiveSectionId] = useState<string | null>(null)
   const [displayedSection, setDisplayedSection] = useState<WorkSection | undefined>(undefined)
@@ -36,7 +39,18 @@ function Home() {
     setMainScrollRoot(node)
   }
 
+  const playAvatarSound = () => {
+    if (!avatarSoundRef.current) {
+      avatarSoundRef.current = new Audio(AVATAR_SOUND_SRC)
+    }
+
+    const sound = avatarSoundRef.current
+    sound.currentTime = 0
+    void sound.play().catch(() => {})
+  }
+
   const scrollToIntro = () => {
+    playAvatarSound()
     setActiveSectionId(null)
     smoothScrollElementsToTop([mainScrollRef.current])
   }
@@ -211,36 +225,63 @@ function Home() {
 
   const visibleSidebarSection = displayedSection ?? activeSection
 
-  return (
-    <main className="home-page">
-      <header className="home-header home-grid">
-        <button
-          type="button"
-          className="home-avatar home-grid-avatar"
-          onClick={scrollToIntro}
-          aria-label="Back to intro"
-        >
-          <img src="/avatar.png" alt="" width={72} height={72} />
-        </button>
+  const linkedInNavContent = (
+    <span className="home-nav-blend">
+      <span className="home-nav-icon home-nav-icon--arrow" aria-hidden="true">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M19.5851 4.41394L19.6661 15.6678L17.6661 15.6825L17.6085 7.80457L5.39172 20.0223L3.97766 18.6083L16.1954 6.38953L8.31848 6.33484L8.33215 4.33484L19.5851 4.41394Z" fill="currentColor" />
+        </svg>
+      </span>
+      <span className="home-nav-label">LinkedIn</span>
+    </span>
+  )
 
-        <nav className="home-nav home-grid-nav" aria-label="Primary">
-          <EmailCopyLink />
+  const interactiveHeader = (
+    <header className="home-header home-header--interactive home-grid">
+      <button
+        type="button"
+        className="home-avatar home-grid-avatar t-press"
+        onClick={scrollToIntro}
+        aria-label="Back to intro"
+      >
+        <img src="/avatar.png" alt="" width={72} height={72} />
+      </button>
+
+      <nav className="home-nav home-grid-nav" aria-label="Primary">
+        <EmailCopyLink />
+        <span className="home-nav-item">
           <a
             href="https://www.linkedin.com/in/igor-berestov/"
-            className="home-nav-link"
+            className="home-nav-link home-nav-link--hit"
             target="_blank"
             rel="noreferrer"
           >
-            <span className="home-nav-icon home-nav-icon--arrow" aria-hidden="true">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M19.5851 4.41394L19.6661 15.6678L17.6661 15.6825L17.6085 7.80457L5.39172 20.0223L3.97766 18.6083L16.1954 6.38953L8.31848 6.33484L8.33215 4.33484L19.5851 4.41394Z" fill="currentColor" />
-              </svg>
-            </span>
-            LinkedIn
+            {linkedInNavContent}
           </a>
-        </nav>
-      </header>
+        </span>
+      </nav>
+    </header>
+  )
 
+  const visualNav = (
+    <div className="home-nav-visual-shell home-grid" aria-hidden="true">
+      <div className="home-grid-avatar home-grid-avatar--spacer" />
+      <nav className="home-nav home-grid-nav">
+        <div id="home-nav-visual-mount" className="home-nav-visual-mount" />
+        <span className="home-nav-item">
+          <span className="home-nav-link home-nav-link--visual">
+            {linkedInNavContent}
+          </span>
+        </span>
+      </nav>
+    </div>
+  )
+
+  return (
+    <>
+      {createPortal(visualNav, document.body)}
+      {createPortal(interactiveHeader, document.body)}
+      <main className="home-page">
       <div className="home-scroll" ref={setMainScrollElement}>
         <div className="home-columns home-grid">
         <aside className="home-sidebar home-grid-sidebar" aria-label="Profile">
@@ -339,7 +380,8 @@ function Home() {
 
         <HomeFooter />
       </div>
-    </main>
+      </main>
+    </>
   )
 }
 
